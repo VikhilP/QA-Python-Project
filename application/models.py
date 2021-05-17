@@ -6,8 +6,8 @@ class GameSeries(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     series_name = db.Column(db.String(50), unique = True)
     series_count = db.Column(db.Integer, nullable=False, default = 0)
-    first_release = db.Column(db.Date)
-    latest_release = db.Column(db.Date)
+    # first_release = db.Column(db.Date)
+    # latest_release = db.Column(db.Date)
     series_review = db.Column(db.String(50), default = "0/10")
     games = db.relationship("Game", backref="seriesname")
 

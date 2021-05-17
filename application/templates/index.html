@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class='index'>
+        {{ form.hidden_tag() }}
+        {% for series in all_series %}
+            <p>{{ series.id }} {{ series.series_name }} {{ series.review }}</p>
+            
+        {% endfor %}
+    </div>
+{% endblock body %}
