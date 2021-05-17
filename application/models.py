@@ -1,6 +1,7 @@
-from enum import unique
+from wtforms.fields.core import SelectField
 from application import db
-
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
 
 class GameSeries(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -18,6 +19,21 @@ class Game(db.Model):
     developer = db.Column(db.String(50), nullable=False)
     release_dateuk = db.Column(db.Date)
     game_review = db.Column(db.String(50), default = "0/10")
+
+
+class SeriesForm(FlaskForm):
+    series_name = StringField('Series Name')
+
+class GameForm(FlaskForm):
+    all_gameseries = GameSeries.query.all()
+    gameseries_array = [("n/a", "n/a"),]
+
+    for series in all_gameseries:
+        gameseries_array.append((series.series_name, series.series_name))
+
+    name = StringField('Game Name')
+    series = SelectField('')
+    
 
     
 
