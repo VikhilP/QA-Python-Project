@@ -33,8 +33,8 @@ class GameForm(FlaskForm):
 
     name = StringField('Game Name')
     series = SelectField('Pick Series (if applicable)', choices = gameseries_array)
-    developer = StringField("Developer")
-    releasedate = DateField("UK Release Year", formast = '%Y')
+    developer = StringField("Developer") #can turn into a select field just like game series
+    releasedate = DateField("UK Release Year", format = '%Y')
     submit = SubmitField("Add Game")
 
 
