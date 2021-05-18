@@ -8,6 +8,7 @@ class GameSeries(db.Model):
     series_count = db.Column(db.Integer, nullable=False, default = 0)
     # first_release = db.Column(db.Date)
     # latest_release = db.Column(db.Date)
+    # abandoned = db.Column(db.Boolean)
     series_review = db.Column(db.String(50), default = "0/10")
     games = db.relationship("Game", backref="seriesname")
 
@@ -17,6 +18,9 @@ class Game(db.Model):
     series = db.Column(db.String(50), db.ForeignKey("game_series.series_name"))
     developer = db.Column(db.String(50), nullable=False)
     release_dateuk = db.Column(db.Date)
+    #genre = db.Column(db.String(50))
+    #age_rating = db.Column(db.String(50)) might be a select field
+
     game_review = db.Column(db.String(50), default = "0/10")
 
 
@@ -29,12 +33,12 @@ class GameForm(FlaskForm):
     gameseries_array = [("n/a", "n/a"),]
 
     for series in all_gameseries:
-        gameseries_array.append((series.series_name, series.series_name))
+        gameseries_array.append(tuple((series.series_name, series.series_name)))
 
     name = StringField('Game Name')
     series = SelectField('Pick Series (if applicable)', choices = gameseries_array)
     developer = StringField("Developer") #can turn into a select field just like game series
-    releasedate = DateField("UK Release Year", format = '%Y')
+    # releasedate = DateField("UK Release Year", format = '%Y')
     submit = SubmitField("Add Game")
 
 
