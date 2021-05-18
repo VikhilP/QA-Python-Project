@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class='readgame'>
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>Game</th>
+                <th>Series</th>
+                <th>Developer</th>
+                <th>Delete</th>
+
+            </tr>
+            {{ form.hidden_tag() }}
+            {% for game in all_games %}
+                <tr>
+                    <th>{{ game.id }}</th>
+                    <th>{{ game.name }}</th>
+                    <th>{{ game.series }}</th>
+                    <th>{{ game.developer}}</th>
+                    <th><form method="POST" action="./deletegame">
+                        <input type="hidden" value="{{game.id}}" name="id">
+                        <input type="submit" name = "action" value="delete">
+                    </form></th>
+                </tr>
+                
+            {% endfor %}
+        </table>
+    </div>
+{% endblock body %}
