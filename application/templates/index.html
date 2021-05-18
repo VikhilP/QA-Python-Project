@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class='index'>
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>Series</th>
+                <th>Review</th>
+                <th>Delete</th>
+
+            </tr>
+            {{ form.hidden_tag() }}
+            {% for series in all_series %}
+                <tr>
+                    <th>{{ series.id }}</th>
+                    <th>{{ series.series_name }}</th>
+                    <th>{{ series.review }}</th>
+                    <th><form method="POST" action="./deleteseries">
+                        <input type="hidden" value="{{series.id}}" name="id">
+                        <input type="submit" name = "action" value="delete">
+                    </form></th>
+                </tr>
+                
+            {% endfor %}
+        </table>
+    </div>
+{% endblock body %}
