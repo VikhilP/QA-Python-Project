@@ -8,6 +8,14 @@ def index():
     form = SeriesForm()
     return render_template("index.html", form=form, all_series = GameSeries.query.all() )
 
+@app.route('/delete', methods=["POST"])
+def delete():
+    temp = request.form.get("id")
+    temptask = GameSeries.query.filter_by(id=temp).first()
+    db.session.delete(temptask)
+    db.session.commit()
+    return redirect(url_for("index"))
+
 @app.route('/addseries', methods = ["GET", "POST"])
 def addseries():
     error = ""
