@@ -1,6 +1,5 @@
 from application import app, db
 from application.models import Game, GameSeries, SeriesForm, GameForm
-from operator import attrgetter
 from flask import render_template, request, redirect, url_for #added this as i know i will need it later
 
 @app.route("/")
@@ -12,16 +11,27 @@ def index():
 def deleteSeries():
     temp = request.form.get("id")
     temptask = GameSeries.query.filter_by(id=temp).first()
+    all_games = Game.query.filter_by(series=temptask.series_name).all()
     db.session.delete(temptask)
+    db.session.commit()
+    print(all_games)
+    for game in all_games:
+        game.series = "n/a"
     db.session.commit()
     return redirect(url_for("index"))
 
 @app.route('/deletegame', methods=["POST"])
 def deleteGame():
-    temp = request.form.get("id")
-    temptask = Game.query.filter_by(id=temp).first()
+    temp = request.form.get("game_id")
+    temptask = Game.query.filter_by(game_id=temp).first()
     db.session.delete(temptask)
+    
     db.session.commit()
+    if temptask.series !="n/a":
+        count = Game.query.filter_by(series=temptask.series).count()
+        series_to_update = GameSeries.query.filter_by(series_name = temptask.series).first()
+        series_to_update.series_count = count
+        db.session.commit()
     return redirect(url_for("readgame"))
 
 @app.route('/addgame', methods = ["GET", "POST"])
@@ -49,7 +59,10 @@ def addgame():
             new_game = Game(name = _name, series = _series, developer = _developer)
             db.session.add(new_game)
             db.session.commit()
-            
+            if _series!= "n/a":
+                game_series_to_update = GameSeries.query.filter_by(series_name=_series).first()
+                game_series_to_update.series_count += 1
+                db.session.commit()
             return redirect(url_for("readgame"))
     
     return render_template('addgame.html', form=form, message=error)
