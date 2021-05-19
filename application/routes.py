@@ -49,6 +49,7 @@ def addgame():
             new_game = Game(name = _name, series = _series, developer = _developer)
             db.session.add(new_game)
             db.session.commit()
+            
             return redirect(url_for("readgame"))
     
     return render_template('addgame.html', form=form, message=error)
