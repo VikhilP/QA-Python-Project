@@ -7,6 +7,7 @@
                 <th>Series</th>
                 <th>Review</th>
                 <th>GameCount</th>
+                <th>Update</th>
                 <th>Delete</th>
             </tr>
             {{ form.hidden_tag() }}
@@ -14,8 +15,11 @@
                 <tr>
                     <th>{{ series.id }}</th>
                     <th>{{ series.series_name }}</th>
-                    <th>{{ series.review }}</th>
+                    <th>{{ series.review }}/10</th>
                     <th>{{ series.series_count }}</th>
+                    <th><form method="GET" action="{{ url_for('updateseries', id=series.id) }}">
+                        <input type="submit" name = "action" value="update">
+                    </form></th>
                     <th><form method="POST" action="./deleteseries">
                         <input type="hidden" value="{{series.id}}" name="id">
                         <input type="submit" name = "action" value="delete">

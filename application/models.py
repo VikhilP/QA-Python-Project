@@ -1,3 +1,4 @@
+from wtforms.fields.core import IntegerField
 from application import db
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField,SelectField, DateField
@@ -9,7 +10,7 @@ class GameSeries(db.Model):
     # first_release = db.Column(db.Date)
     # latest_release = db.Column(db.Date)
     # abandoned = db.Column(db.Boolean)
-    series_review = db.Column(db.String(50), default = "0/10")
+    series_review = db.Column(db.Float(2,2), default = 0.00) 
     games = db.relationship("Game", backref="seriesname")
 
 class Game(db.Model):
@@ -17,11 +18,11 @@ class Game(db.Model):
     name = db.Column(db.String(50), nullable=False)
     series = db.Column(db.String(50), db.ForeignKey("game_series.series_name"))
     developer = db.Column(db.String(50), nullable=False)
-    release_dateuk = db.Column(db.Date)
+    # release_dateuk = db.Column(db.Date)
     #genre = db.Column(db.String(50))
     #age_rating = db.Column(db.String(50)) might be a select field
 
-    game_review = db.Column(db.String(50), default = "0/10")
+    game_review = db.Column(db.Integer, default = 0)
 
 
 class SeriesForm(FlaskForm):
@@ -39,6 +40,7 @@ class GameForm(FlaskForm):
     series = SelectField('Pick Series (if applicable)', choices = gameseries_array)
     developer = StringField("Developer") #can turn into a select field just like game series
     # releasedate = DateField("UK Release Year", format = '%Y')
+    review = IntegerField("Rating")
     submit = SubmitField("Add Game")
 
 

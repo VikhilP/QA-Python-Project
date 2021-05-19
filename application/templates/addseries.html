@@ -3,7 +3,9 @@
     <div class='form'>
         <form method='POST' action=''>
             {{ form.hidden_tag() }}
-            {{ form.series_name.label }} {{ form.series_name}} 
+            items denoted by '*' are required 
+            <br>
+            {{ form.series_name.label }} * {{ form.series_name}} 
             <br>
             {{ form.submit }}
         {{ message }}

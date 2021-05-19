@@ -24,8 +24,8 @@ def deleteSeries():
 def deleteGame():
     temp = request.form.get("game_id")
     temptask = Game.query.filter_by(game_id=temp).first()
+    print(temp)
     db.session.delete(temptask)
-    
     db.session.commit()
     if temptask.series !="n/a":
         count = Game.query.filter_by(series=temptask.series).count()
@@ -33,6 +33,9 @@ def deleteGame():
         series_to_update.series_count = count
         db.session.commit()
     return redirect(url_for("readgame"))
+
+
+
 
 @app.route('/addgame', methods = ["GET", "POST"])
 def addgame():
@@ -50,32 +53,113 @@ def addgame():
         _name = form.name.data
         _series = form.series.data
         _developer = form.developer.data
+        _review = form.review.data
 
-        if len(_name) == 0:
-            error = "Please enter a game name"
-        elif len(_developer) == 0:
-            error = "Please enter a developer name"
+        if len(_name) == 0 or len(_developer) == 0:
+            error = "Please fill the required fields"
         else:
-            new_game = Game(name = _name, series = _series, developer = _developer)
+            new_game = Game(name = _name, series = _series, developer = _developer, game_review = _review)
             db.session.add(new_game)
             db.session.commit()
             if _series!= "n/a":
                 game_series_to_update = GameSeries.query.filter_by(series_name=_series).first()
                 game_series_to_update.series_count += 1
                 db.session.commit()
+                sum = 0
+                all_series_update = Game.query.filter_by(series=_series).all()
+                for game in all_series_update:
+                    sum = sum + int(game.game_review)
+                game_series_to_update.series_review = sum/ (Game.query.filter_by(series=_series).count())
+
+
             return redirect(url_for("readgame"))
     
     return render_template('addgame.html', form=form, message=error)
 
-@app.route("/readgame")
+
+@app.route("/updateseries<int:id>", methods=["GET", "POST"])
+def updateseries(id):
+    error = ""
+    series_to_update = GameSeries.query.filter_by(id=id).first()
+
+    form = SeriesForm()
+
+    if form.validate_on_submit():
+        _name = form.series_name.data
+
+        old_name = series_to_update.series_name
+        if len(_name) == 0:
+            error = "Please fill the required fields"
+        else:
+            series_to_update.series_name = _name
+            db.session.commit()
+            all_games_filter = Game.query.filter_by(series=old_name).all()
+            for game in all_games_filter:
+                game.series = _name
+            db.session.commit()
+            return redirect(url_for("index"))
+    else:
+        form.series_name.data = series_to_update.series_name
+
+
+    
+    return render_template('updateseries.html', form=form, message=error, series=series_to_update)
+
+
+@app.route("/updategame<int:id>", methods=["GET", "POST"])
+def updategame(id):
+    error = ""
+    game_to_update = Game.query.filter_by(game_id=id).first()
+    
+    form = GameForm()
+    all_gameseries = GameSeries.query.all()
+
+    gameseries_array = [("n/a", "n/a"),]
+    for series in all_gameseries:
+        gameseries_array.append(tuple((series.series_name, series.series_name)))
+
+    form.series.choices=gameseries_array
+    seriesupdate = game_to_update.series
+
+    if form.validate_on_submit():
+        _name = form.name.data
+        _series = form.series.data
+        _developer = form.developer.data
+
+        if len(_name) == 0 or len(_developer) == 0:
+            error = "Please fill the required fields"
+        else:
+            game_to_update.name = _name
+            game_to_update.series = _series
+            game_to_update.developer = _developer
+            db.session.commit()
+            
+            
+        if seriesupdate != "n/a":
+            count = Game.query.filter_by(series=seriesupdate).count()
+            old_series_to_update = GameSeries.query.filter_by(series_name = seriesupdate).first()
+            old_series_to_update.series_count = count
+            db.session.commit()
+        if _series != "n/a":
+            count = Game.query.filter_by(series=_series).count()
+            new_series_to_update = GameSeries.query.filter_by(series_name=_series).first()
+            new_series_to_update.series_count = count
+            db.session.commit()
+        return redirect(url_for("readgame"))
+    else:
+        form.name.data = game_to_update.name
+        form.series.data = game_to_update.series
+        form.developer.data = game_to_update.developer
+    
+    return render_template('updategame.html', form=form, message=error, game=game_to_update)
+
+
+@app.route("/readgame", methods=["GET", "POST"])
 def readgame():
     form = GameForm()
- 
     all_games_sorted = Game.query.order_by(Game.series).order_by(Game.name).all() 
     
     return render_template("readgame.html", form=form, all_games = all_games_sorted )
-
-
 
 
 @app.route('/addseries', methods = ["GET", "POST"])
@@ -86,7 +170,6 @@ def addseries():
     if request.method == "POST":
         series_name = form.series_name.data
         
-
         if len(series_name) == 0:
             error = "Please enter the series name"
         else:

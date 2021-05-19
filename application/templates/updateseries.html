@@ -2,16 +2,12 @@
 {% block body %}
     <div class='form'>
         <form method='POST' action=''>
+            <input type="hidden" value="{{series.id}}" name="id">
             {{ form.hidden_tag() }}
             items denoted by '*' are required 
             <br>
-            {{ form.name.label }}* {{ form.name}} 
+            {{ form.series_name.label }} * {{ form.series_name}} 
             <br>
-            {{ form.series.label }} {{ form.series}} 
-            <br>
-            {{ form.developer.label }}* {{ form.developer}} 
-            <br>
-            {{ form.review.label }}* {{ form.review}} 
             {{ form.submit }}
         {{ message }}
         </form>
