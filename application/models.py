@@ -10,7 +10,7 @@ class GameSeries(db.Model):
     # first_release = db.Column(db.Date)
     # latest_release = db.Column(db.Date)
     # abandoned = db.Column(db.Boolean)
-    series_review = db.Column(db.Float(2,2), default = 0.00) 
+    series_review = db.Column(db.Float, default=0) 
     games = db.relationship("Game", backref="seriesname")
 
 class Game(db.Model):

@@ -15,7 +15,7 @@
                 <tr>
                     <th>{{ series.id }}</th>
                     <th>{{ series.series_name }}</th>
-                    <th>{{ series.review }}/10</th>
+                    <th>{{ series.series_review }}/10</th>
                     <th>{{ series.series_count }}</th>
                     <th><form method="GET" action="{{ url_for('updateseries', id=series.id) }}">
                         <input type="submit" name = "action" value="update">

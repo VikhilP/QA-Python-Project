@@ -5,6 +5,16 @@ from flask import render_template, request, redirect, url_for #added this as i k
 @app.route("/")
 def index():
     form = SeriesForm()
+    a = GameSeries.query.all()
+    for _series in a:
+        sum = 0
+        b = Game.query.filter_by(series=_series.series_name)
+        for game in b:
+            sum = sum + game.game_review
+        _series.series_review = sum / (b.count())
+    db.session.commit()
+
+
     return render_template("index.html", form=form, all_series = GameSeries.query.all() )
 
 @app.route('/deleteseries', methods=["POST"])
@@ -65,12 +75,6 @@ def addgame():
                 game_series_to_update = GameSeries.query.filter_by(series_name=_series).first()
                 game_series_to_update.series_count += 1
                 db.session.commit()
-                sum = 0
-                all_series_update = Game.query.filter_by(series=_series).all()
-                for game in all_series_update:
-                    sum = sum + int(game.game_review)
-                game_series_to_update.series_review = sum/ (Game.query.filter_by(series=_series).count())
-
 
             return redirect(url_for("readgame"))
     
