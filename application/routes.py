@@ -5,15 +5,6 @@ from flask import render_template, request, redirect, url_for #added this as i k
 @app.route("/")
 def index():
     form = SeriesForm()
-    # a = GameSeries.query.all()
-    # for _series in a:
-    #     sum = 0
-    #     b = Game.query.filter_by(series=_series.series_name)
-    #     for game in b:
-    #         sum = sum + game.game_review
-    #     _series.series_review = sum / (b.count())
-    # db.session.commit()
-
     return render_template("index.html", form=form, all_series = GameSeries.query.all() )
 
 @app.route('/deleteseries', methods=["POST"])
@@ -119,9 +110,6 @@ def updateseries(id):
             return redirect(url_for("index"))
     else:
         form.series_name.data = series_to_update.series_name
-
-
-    
     return render_template('updateseries.html', form=form, message=error, series=series_to_update)
 
 
@@ -170,10 +158,11 @@ def updategame(id):
         for _series in a:
             sum = 0
             b = Game.query.filter_by(series=_series.series_name)
-            for game in b:
-                sum = sum + game.game_review
-            if b.count()!=0:
-                _series.series_review = sum / (b.count())
+            if b.count()>0:
+                for game in b:
+                    sum = sum + game.game_review
+                if b.count()!=0:
+                    _series.series_review = sum / (b.count())
         db.session.commit()
         return redirect(url_for("readgame"))
     else:
@@ -181,9 +170,7 @@ def updategame(id):
         form.series.data = game_to_update.series
         form.developer.data = game_to_update.developer
         form.review.data = game_to_update.game_review
-    
     return render_template('updategame.html', form=form, message=error, game=game_to_update)
-
 
 @app.route("/readgame", methods=["GET", "POST"])
 def readgame():
@@ -192,12 +179,10 @@ def readgame():
     print(app.config['SQLALCHEMY_DATABASE_URI'])
     return render_template("readgame.html", form=form, all_games = all_games_sorted )
 
-
 @app.route('/addseries', methods = ["GET", "POST"])
 def addseries():
     error = ""
     form = SeriesForm()
-
     if request.method == "POST":
         series_name = form.series_name.data
         

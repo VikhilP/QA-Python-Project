@@ -30,14 +30,14 @@ class SeriesForm(FlaskForm):
     submit = SubmitField("Add Series")
 
 class GameForm(FlaskForm):
-    all_gameseries = GameSeries.query.all()
-    gameseries_array = [("n/a", "n/a"),]
+    # all_gameseries = GameSeries.query.all()
+    # gameseries_array = [("n/a", "n/a"),]
 
-    for series in all_gameseries:
-        gameseries_array.append(tuple((series.series_name, series.series_name)))
+    # for series in all_gameseries:
+    #     gameseries_array.append(tuple((series.series_name, series.series_name)))
 
     name = StringField('Game Name')
-    series = SelectField('Pick Series (if applicable)', choices = gameseries_array)
+    series = SelectField('Pick Series (if applicable)', choices = [("n/a","n/a")])
     developer = StringField("Developer") #can turn into a select field just like game series
     # releasedate = DateField("UK Release Year", format = '%Y')
     review = IntegerField("Rating")
