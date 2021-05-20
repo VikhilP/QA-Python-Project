@@ -14,7 +14,6 @@ def index():
         _series.series_review = sum / (b.count())
     db.session.commit()
 
-
     return render_template("index.html", form=form, all_series = GameSeries.query.all() )
 
 @app.route('/deleteseries', methods=["POST"])
@@ -43,8 +42,6 @@ def deleteGame():
         series_to_update.series_count = count
         db.session.commit()
     return redirect(url_for("readgame"))
-
-
 
 
 @app.route('/addgame', methods = ["GET", "POST"])
