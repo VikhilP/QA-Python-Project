@@ -5,14 +5,14 @@ from flask import render_template, request, redirect, url_for #added this as i k
 @app.route("/")
 def index():
     form = SeriesForm()
-    a = GameSeries.query.all()
-    for _series in a:
-        sum = 0
-        b = Game.query.filter_by(series=_series.series_name)
-        for game in b:
-            sum = sum + game.game_review
-        _series.series_review = sum / (b.count())
-    db.session.commit()
+    # a = GameSeries.query.all()
+    # for _series in a:
+    #     sum = 0
+    #     b = Game.query.filter_by(series=_series.series_name)
+    #     for game in b:
+    #         sum = sum + game.game_review
+    #     _series.series_review = sum / (b.count())
+    # db.session.commit()
 
     return render_template("index.html", form=form, all_series = GameSeries.query.all() )
 
@@ -40,6 +40,15 @@ def deleteGame():
         count = Game.query.filter_by(series=temptask.series).count()
         series_to_update = GameSeries.query.filter_by(series_name = temptask.series).first()
         series_to_update.series_count = count
+        db.session.commit()
+        a = GameSeries.query.all()
+        for _series in a:
+            sum = 0
+            b = Game.query.filter_by(series=_series.series_name)
+            for game in b:
+                sum = sum + game.game_review
+            if b.count()!=0:
+                _series.series_review = sum / (b.count())
         db.session.commit()
     return redirect(url_for("readgame"))
 
@@ -71,6 +80,15 @@ def addgame():
             if _series!= "n/a":
                 game_series_to_update = GameSeries.query.filter_by(series_name=_series).first()
                 game_series_to_update.series_count += 1
+                db.session.commit()
+                a = GameSeries.query.all()
+                for _series in a:
+                    sum = 0
+                    b = Game.query.filter_by(series=_series.series_name)
+                    for game in b:
+                        sum = sum + game.game_review
+                    if b.count()!=0:
+                        _series.series_review = sum / (b.count())
                 db.session.commit()
 
             return redirect(url_for("readgame"))
@@ -126,6 +144,7 @@ def updategame(id):
         _name = form.name.data
         _series = form.series.data
         _developer = form.developer.data
+        _review = form.review.data
 
         if len(_name) == 0 or len(_developer) == 0:
             error = "Please fill the required fields"
@@ -133,6 +152,7 @@ def updategame(id):
             game_to_update.name = _name
             game_to_update.series = _series
             game_to_update.developer = _developer
+            game_to_update.game_review = _review
             db.session.commit()
             
             
@@ -146,11 +166,21 @@ def updategame(id):
             new_series_to_update = GameSeries.query.filter_by(series_name=_series).first()
             new_series_to_update.series_count = count
             db.session.commit()
+        a = GameSeries.query.all()
+        for _series in a:
+            sum = 0
+            b = Game.query.filter_by(series=_series.series_name)
+            for game in b:
+                sum = sum + game.game_review
+            if b.count()!=0:
+                _series.series_review = sum / (b.count())
+        db.session.commit()
         return redirect(url_for("readgame"))
     else:
         form.name.data = game_to_update.name
         form.series.data = game_to_update.series
         form.developer.data = game_to_update.developer
+        form.review.data = game_to_update.game_review
     
     return render_template('updategame.html', form=form, message=error, game=game_to_update)
 
@@ -159,7 +189,7 @@ def updategame(id):
 def readgame():
     form = GameForm()
     all_games_sorted = Game.query.order_by(Game.series).order_by(Game.name).all() 
-    
+    print(app.config['SQLALCHEMY_DATABASE_URI'])
     return render_template("readgame.html", form=form, all_games = all_games_sorted )
 
 
