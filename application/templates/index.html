@@ -12,6 +12,7 @@
             </tr>
             {{ form.hidden_tag() }}
             {% for series in all_series %}
+                {% if series.series_name != "n/a" %}
                 <tr>
                     <th>{{ series.id }}</th>
                     <th>{{ series.series_name }}</th>
@@ -25,6 +26,7 @@
                         <input type="submit" name = "action" value="delete">
                     </form></th>
                 </tr>
+                {% endif %}
                 
             {% endfor %}
         </table>

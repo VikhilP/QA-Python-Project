@@ -16,7 +16,7 @@ class GameSeries(db.Model):
 class Game(db.Model):
     game_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
-    series = db.Column(db.String(50), db.ForeignKey("game_series.series_name"))
+    series = db.Column(db.String(50), db.ForeignKey("game_series.series_name"),nullable=True)
     developer = db.Column(db.String(50), nullable=False)
     # release_dateuk = db.Column(db.Date)
     #genre = db.Column(db.String(50))
@@ -37,7 +37,7 @@ class GameForm(FlaskForm):
     #     gameseries_array.append(tuple((series.series_name, series.series_name)))
 
     name = StringField('Game Name')
-    series = SelectField('Pick Series (if applicable)', choices = [("n/a","n/a")])
+    series = SelectField('Pick Series (if applicable)', choices = [("n/a","n/a"),])
     developer = StringField("Developer") #can turn into a select field just like game series
     # releasedate = DateField("UK Release Year", format = '%Y')
     review = IntegerField("Rating")

@@ -62,5 +62,18 @@ class TestBase(LiveServerTestCase):
 class TestExample(TestBase):
     def test_add_new_game(self):
         self.driver.find_element_by_xpath('/html/body/div[1]/a[3]').click()
-        self.assertEqual(url_for('addgame'),self.driver.current_url)
+        self.assertIn(url_for('addgame'),self.driver.current_url)
+
+        #Game Name
+        self.driver.find_element_by_xpath('//*[@id="name"]').send_keys("Rocket League")
+        #Developer
+        self.driver.find_element_by_xpath('//*[@id="developer"]').send_keys("Psionix")
+        #review
+        self.driver.find_element_by_xpath('//*[@id="review"]').send_keys(8)
+        #Submit
+        self.driver.find_element_by_xpath('//*[@id="submit"]').click
+
+        self.assertIn(url_for('readgame'),self.driver.current_url)
+        
+        self.assertEqual("Rocket League", Game.query.filter_by(game_id=3).name)
         

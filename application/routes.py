@@ -5,6 +5,7 @@ from flask import render_template, request, redirect, url_for #added this as i k
 @app.route("/")
 def index():
     form = SeriesForm()
+    # a = GameSeries.query.filter_by(series_name=_series).first()
     return render_template("index.html", form=form, all_series = GameSeries.query.all() )
 
 @app.route('/deleteseries', methods=["POST"])
@@ -49,7 +50,7 @@ def addgame():
     error = ""
     form = GameForm()
     all_gameseries = GameSeries.query.all()
-    gameseries_array = [("n/a", "n/a"),]
+    gameseries_array = []
 
     for series in all_gameseries:
         gameseries_array.append(tuple((series.series_name, series.series_name)))
@@ -65,9 +66,14 @@ def addgame():
         if len(_name) == 0 or len(_developer) == 0:
             error = "Please fill the required fields"
         else:
-            new_game = Game(name = _name, series = _series, developer = _developer, game_review = _review)
-            db.session.add(new_game)
-            db.session.commit()
+            if _series == "n/a":
+                new_game = Game(name = _name, series="n/a", developer = _developer, game_review = _review)
+                db.session.add(new_game)
+                db.session.commit()
+            else:
+                new_game = Game(name = _name, series = _series, developer = _developer, game_review = _review)
+                db.session.add(new_game)
+                db.session.commit()
             if _series!= "n/a":
                 game_series_to_update = GameSeries.query.filter_by(series_name=_series).first()
                 game_series_to_update.series_count += 1

@@ -35,8 +35,11 @@ class TestBase(TestCase):
         
         # Create test series
         sampleseries = GameSeries(series_name = "Yakuza")
+        sampleseries1 = GameSeries(series_name = "n/a")
 
         # save game series to database
+        
+        db.session.add(sampleseries1)
         db.session.add(sampleseries)
         db.session.commit()
 
@@ -145,7 +148,7 @@ class TestAdd(TestBase):
 
     def test_update_series(self):
         response = self.client.post(
-            url_for('updateseries', id=1),
+            url_for('updateseries', id=2),
             data = dict(series_name = "Fifa"),
             follow_redirects = True
         )
@@ -153,7 +156,7 @@ class TestAdd(TestBase):
 
     def test_update_series_readgame(self):
         self.client.post(
-            url_for('updateseries', id=1),
+            url_for('updateseries', id=2),
             data = dict(series_name = "Fifa"),
             follow_redirects = True
         )
@@ -170,7 +173,7 @@ class TestAdd(TestBase):
             data = dict(name = "Yakuza 0", series = "Yakuza", developer = "RGG", review=9),
             follow_redirects = True
         )
-        self.assertEqual(9.0,GameSeries.query.get(1).series_review)
+        self.assertEqual(9.0,GameSeries.query.get(2).series_review)
     
     def test_delete_game(self):
         self.client.post(
@@ -184,11 +187,11 @@ class TestAdd(TestBase):
     def test_delete_series(self):
         self.client.post(
             url_for("deleteSeries"),
-            data = dict(id=1),
+            data = dict(id=2),
             follow_redirects = True
         )
         f = len(GameSeries.query.all())
         print(f)
-        self.assertIs(f, 0)
+        self.assertIs(f, 1)
 
     
