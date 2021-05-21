@@ -38,7 +38,7 @@ def deleteGame():
             b = Game.query.filter_by(series=_series.series_name)
             for game in b:
                 sum = sum + game.game_review
-            if b.count()!=0:
+            if b.count()!=0 and sum !=0:
                 _series.series_review = sum / (b.count())
         db.session.commit()
     return redirect(url_for("readgame"))
@@ -78,7 +78,7 @@ def addgame():
                     b = Game.query.filter_by(series=_series.series_name)
                     for game in b:
                         sum = sum + game.game_review
-                    if b.count()!=0:
+                    if b.count()!=0 and sum !=0:
                         _series.series_review = sum / (b.count())
                 db.session.commit()
 
@@ -161,7 +161,7 @@ def updategame(id):
             if b.count()>0:
                 for game in b:
                     sum = sum + game.game_review
-                if b.count()!=0:
+                if b.count()!=0 and sum !=0:
                     _series.series_review = sum / (b.count())
         db.session.commit()
         return redirect(url_for("readgame"))
