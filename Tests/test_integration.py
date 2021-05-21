@@ -2,6 +2,8 @@ from flask.wrappers import Response
 from flask_sqlalchemy import SQLAlchemy
 import pytest
 import sqlalchemy
+from selenium import webdriver
+from urllib.request import urlopen
 
 #from application import routes
 from application import app,db
@@ -11,27 +13,28 @@ from flask import url_for
 from flask_testing import LiveServerTestCase
 
 class TestBase(LiveServerTestCase):
+    TEST_PORT = 5050 # test port, doesn't need to be open
+
     def create_app(self):
 
-        # Pass in testing configurations for the app. Here we use sqlite without a persistent database for our tests.
-        app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///test.db"
-        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
-        app.config['SECRET_KEY'] = 'bdfhjs'
-        app.config['WTF_CSRF_ENABLED'] = False
-        app.config['DEBUG'] = True
+        app.config.update(
+            SQLALCHEMY_DATABASE_URI="sqlite:///test.db",
+            LIVESERVER_PORT=self.TEST_PORT,
+            
+            DEBUG=True,
+            TESTING=True
+        )
 
         return app
 
     def setUp(self):
-        """
-        Will be called before every test
-        """
-        # Create table
 
-        db.drop_all()
-        db.create_all()
-        
-        # Create test series
+        chrome_options = webdriver.chrome.options.Options()
+        chrome_options.add_argument('--headless')
+
+        self.driver = webdriver.Chrome(options=chrome_options)
+
+        db.create_all() # create schema before we try to get the page
         sampleseries = GameSeries(series_name = "Yakuza")
 
         # save game series to database
@@ -49,18 +52,15 @@ class TestBase(LiveServerTestCase):
         db.session.add(samplegame2)
         db.session.commit()
 
+        self.driver.get(f'http://localhost:{self.TEST_PORT}')
 
     def tearDown(self):
-        """
-        Will be called after every test
-        """
-        # db.session.delete(GameSeries.query.first())
-        # db.session.commit()
-        db.session.remove()
+        self.driver.quit()
+
         db.drop_all()
 
 class TestExample(TestBase):
-    def add_new_game(self):
+    def test_add_new_game(self):
         self.driver.find_element_by_xpath('/html/body/div[1]/a[3]').click()
         self.assertEqual(url_for('addgame'),self.driver.current_url)
         
