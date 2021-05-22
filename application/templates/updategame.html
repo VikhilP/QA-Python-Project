@@ -2,6 +2,7 @@
 {% block body %}
     <div class='form'>
         <form method='POST' action=''>
+            <input type="hidden" value="{{game.game_id}}" name="id">
             {{ form.hidden_tag() }}
             items denoted by '*' are required 
             <br>
