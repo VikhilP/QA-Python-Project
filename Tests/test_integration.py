@@ -88,7 +88,7 @@ class TestStories(TestBase):
 
     def test_read_my_games(self):
         self.driver.find_element_by_xpath('//*[@id="Nav Bar"]/a[2]').click()
-        text = self.driver.find_element_by_xpath('/html/body/div[2]/table/tbody/tr[2]/th[2]').text()
+        text = self.driver.find_element_by_xpath('/html/body/div[2]/table/tbody/tr[2]/th[2]').text
         self.assertIn(url_for('readgame'),self.driver.current_url)
         self.assertIn("Yakuza 0", text)
 
