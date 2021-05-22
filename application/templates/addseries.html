@@ -7,6 +7,13 @@
             <br>
             {{ form.series_name.label }} * {{ form.series_name}} 
             <br>
+            {% if form.series_name.errors %}
+                <div class='error'>
+                    {% for error in form.series_name.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
             {{ form.submit }}
         {{ message }}
         </form>

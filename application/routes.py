@@ -63,32 +63,32 @@ def addgame():
         _developer = form.developer.data
         _review = form.review.data
 
-        if len(_name) == 0 or len(_developer) == 0:
-            error = "Please fill the required fields"
+        # if len(_name) == 0 or len(_developer) == 0:
+        #     error = "Please fill the required fields"
+        # else:
+        if _series == "n/a":
+            new_game = Game(name = _name, series="n/a", developer = _developer, game_review = _review)
+            db.session.add(new_game)
+            db.session.commit()
         else:
-            if _series == "n/a":
-                new_game = Game(name = _name, series="n/a", developer = _developer, game_review = _review)
-                db.session.add(new_game)
-                db.session.commit()
-            else:
-                new_game = Game(name = _name, series = _series, developer = _developer, game_review = _review)
-                db.session.add(new_game)
-                db.session.commit()
-            if _series!= "n/a":
-                game_series_to_update = GameSeries.query.filter_by(series_name=_series).first()
-                game_series_to_update.series_count += 1
-                db.session.commit()
-                a = GameSeries.query.all()
-                for _series in a:
-                    sum = 0
-                    b = Game.query.filter_by(series=_series.series_name)
-                    for game in b:
-                        sum = sum + game.game_review
-                    if b.count()!=0 and sum !=0:
-                        _series.series_review = sum / (b.count())
-                db.session.commit()
+            new_game = Game(name = _name, series = _series, developer = _developer, game_review = _review)
+            db.session.add(new_game)
+            db.session.commit()
+        if _series!= "n/a":
+            game_series_to_update = GameSeries.query.filter_by(series_name=_series).first()
+            game_series_to_update.series_count += 1
+            db.session.commit()
+            a = GameSeries.query.all()
+            for _series in a:
+                sum = 0
+                b = Game.query.filter_by(series=_series.series_name)
+                for game in b:
+                    sum = sum + game.game_review
+                if b.count()!=0 and sum !=0:
+                    _series.series_review = sum / (b.count())
+            db.session.commit()
 
-            return redirect(url_for("readgame"))
+        return redirect(url_for("readgame"))
     
     return render_template('addgame.html', form=form, message=error)
 
@@ -189,17 +189,26 @@ def readgame():
 def addseries():
     error = ""
     form = SeriesForm()
-    if request.method == "POST":
-        series_name = form.series_name.data
-        
-        if len(series_name) == 0:
-            error = "Please enter the series name"
+    if form.validate_on_submit():
+        _series = form.series_name.data
+        a = GameSeries.query.all()
+        b = []
+        for series in a:
+            b.append(series.series_name)
+        # return b
+        # if len(series_name) == 0:
+        #     error = "Please enter the series name"
+        # else:
+        print(b)
+        print(_series)
+        if _series in b:
+            error = "That series has already been used"
         else:
-            new_series = GameSeries(series_name = form.series_name.data)
+            new_series = GameSeries(series_name = _series)
             db.session.add(new_series)
             db.session.commit()
             return redirect(url_for("index"))
-    
+            
     return render_template('addseries.html', form=form, message=error)
 
 
