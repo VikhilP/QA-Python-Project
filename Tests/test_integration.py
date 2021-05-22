@@ -48,9 +48,9 @@ class TestBase(LiveServerTestCase):
         a = GameSeries.query.filter_by(series_name="Yakuza").first()
 
         samplegame1 = Game(name="Yakuza 0", series=a.series_name, 
-            developer="RGG", game_review=10)
+            developer="RGG", game_review=10, release_dateuk = 2015)
         samplegame2 = Game(name="Yakuza Kiwami", series=a.series_name, 
-            developer="RGG", game_review=9)
+            developer="RGG", game_review=9, release_dateuk = 2016)
         db.session.add(samplegame1)
         db.session.add(samplegame2)
         db.session.commit()
@@ -73,6 +73,8 @@ class TestStories(TestBase):
         self.driver.find_element_by_xpath('//*[@id="developer"]').send_keys("Psionix")
         #review
         self.driver.find_element_by_xpath('//*[@id="review"]').send_keys("8")
+        
+        self.driver.find_element_by_xpath('//*[@id="releasedate"]').send_keys("2015")
         #Submit
         self.driver.find_element_by_xpath('//*[@id="submit"]').click()
 

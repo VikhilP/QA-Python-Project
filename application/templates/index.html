@@ -7,6 +7,8 @@
                 <th>Series</th>
                 <th>Review</th>
                 <th>GameCount</th>
+                <th>First Release</th>
+                <th>Last Release</th>
                 <th>Update</th>
                 <th>Delete</th>
             </tr>
@@ -14,17 +16,19 @@
             {% for series in all_series %}
                 {% if series.series_name != "n/a" %}
                 <tr>
-                    <th>{{ series.id }}</th>
-                    <th>{{ series.series_name }}</th>
-                    <th>{{ series.series_review }}/10</th>
-                    <th>{{ series.series_count }}</th>
-                    <th><form method="GET" action="{{ url_for('updateseries', id=series.id) }}">
+                    <td>{{ series.id }}</td>
+                    <td>{{ series.series_name }}</td>
+                    <td>{{ series.series_review }}/10</td>
+                    <td>{{ series.series_count }}</td>
+                    <td>{{ series.first_release }}</td>
+                    <td>{{ series.latest_release }}</td>
+                    <td><form method="GET" action="{{ url_for('updateseries', id=series.id) }}">
                         <input type="submit" name = "action" value="update">
-                    </form></th>
-                    <th><form method="POST" action="./deleteseries">
+                    </form></td>
+                    <td><form method="POST" action="./deleteseries">
                         <input type="hidden" value="{{series.id}}" name="id">
                         <input type="submit" name = "action" value="delete">
-                    </form></th>
+                    </form></td>
                 </tr>
                 {% endif %}
                 

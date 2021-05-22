@@ -12,7 +12,23 @@
             <br>
             {{ form.developer.label }}* {{ form.developer}} 
             <br>
+            {{ form.releasedate.label }}* {{ form.releasedate}} 
+            <br>
             {{ form.review.label }}* {{ form.review}} 
+            {% if form.releasedate.errors %}
+                <div class='error'>
+                    {% for error in form.releasedate.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if form.review.errors %}
+                <div class='error'>
+                    {% for error in form.review.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
             {{ form.submit }}
         {{ message }}
         </form>

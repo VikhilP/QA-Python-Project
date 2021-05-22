@@ -7,6 +7,7 @@
                 <th>Game</th>
                 <th>Series</th>
                 <th>Developer</th>
+                <th>Release Year</th>
                 <th>Review</th>
                 <th>Update</th>
                 <th>Delete</th>
@@ -14,18 +15,19 @@
             {{ form.hidden_tag() }}
             {% for game in all_games %}
                 <tr>
-                    <th>{{ game.game_id }}</th>
-                    <th>{{ game.name }}</th>
-                    <th>{{ game.series }}</th>
-                    <th>{{ game.developer}}</th>
-                    <th>{{ game.game_review}}/10</th>
-                    <th><form method="GET" action="{{ url_for('updategame', id=game.game_id) }}">
+                    <td>{{ game.game_id }}</td>
+                    <td>{{ game.name }}</td>
+                    <td>{{ game.series }}</td>
+                    <td>{{ game.developer}}</td>
+                    <td>{{ game.release_dateuk}}</td>
+                    <td>{{ game.game_review}}/10</td>
+                    <td><form method="GET" action="{{ url_for('updategame', id=game.game_id) }}">
                         <input type="submit" name = "action" value="update">
-                    </form></th>
-                    <th><form method="POST" action="./deletegame">
+                    </form></td>
+                    <td><form method="POST" action="./deletegame">
                         <input type="hidden" value="{{game.game_id}}" name="game_id">
                         <input type="submit" name = "action" value="delete">
-                    </form></th>
+                    </form></td>
                 </tr>
                 
             {% endfor %}

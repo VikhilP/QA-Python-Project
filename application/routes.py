@@ -41,6 +41,11 @@ def deleteGame():
                 sum = sum + game.game_review
             if b.count()!=0 and sum !=0:
                 _series.series_review = sum / (b.count())
+            elif b.count()==0:
+                    _series.series_review = 0.0
+                    _series.latest_release = 0
+                    _series.first_release = 0
+
         db.session.commit()
     return redirect(url_for("readgame"))
 
@@ -57,23 +62,17 @@ def addgame():
 
     form.series.choices=gameseries_array
 
-    if request.method == "POST":
+    if form.validate_on_submit():
         _name = form.name.data
         _series = form.series.data
         _developer = form.developer.data
         _review = form.review.data
+        _release = form.releasedate.data
 
-        # if len(_name) == 0 or len(_developer) == 0:
-        #     error = "Please fill the required fields"
-        # else:
-        if _series == "n/a":
-            new_game = Game(name = _name, series="n/a", developer = _developer, game_review = _review)
-            db.session.add(new_game)
-            db.session.commit()
-        else:
-            new_game = Game(name = _name, series = _series, developer = _developer, game_review = _review)
-            db.session.add(new_game)
-            db.session.commit()
+        
+        new_game = Game(name = _name, series = _series, developer = _developer, game_review = _review, release_dateuk = _release)
+        db.session.add(new_game)
+        db.session.commit()
         if _series!= "n/a":
             game_series_to_update = GameSeries.query.filter_by(series_name=_series).first()
             game_series_to_update.series_count += 1
@@ -82,10 +81,26 @@ def addgame():
             for _series in a:
                 sum = 0
                 b = Game.query.filter_by(series=_series.series_name)
+                print(_series.first_release)
+                firstr = int(_series.first_release or 0)
+                lastr = int(_series.latest_release or 0)
                 for game in b:
                     sum = sum + game.game_review
+                    
+                    if game.release_dateuk > lastr:
+                        _series.latest_release = game.release_dateuk
+                        game.release_dateuk = firstr
+
+                    if game.release_dateuk < firstr or firstr == 0:
+                        _series.first_release = game.release_dateuk
+                        game.release_dateuk = firstr
+                
                 if b.count()!=0 and sum !=0:
                     _series.series_review = sum / (b.count())
+                elif b.count()==0:
+                    _series.series_review = 0.0
+                    _series.latest_release = 0
+                    _series.first_release = 0
             db.session.commit()
 
         return redirect(url_for("readgame"))
@@ -139,15 +154,17 @@ def updategame(id):
         _series = form.series.data
         _developer = form.developer.data
         _review = form.review.data
+        _release = form.releasedate.data
 
-        if len(_name) == 0 or len(_developer) == 0:
-            error = "Please fill the required fields"
-        else:
-            game_to_update.name = _name
-            game_to_update.series = _series
-            game_to_update.developer = _developer
-            game_to_update.game_review = _review
-            db.session.commit()
+        # if len(_name) == 0 or len(_developer) == 0:
+        #     error = "Please fill the required fields"
+        
+        game_to_update.name = _name
+        game_to_update.series = _series
+        game_to_update.developer = _developer
+        game_to_update.game_review = _review
+        game_to_update.release_dateuk = _release
+        db.session.commit()
             
             
         if seriesupdate != "n/a":
@@ -160,15 +177,36 @@ def updategame(id):
             new_series_to_update = GameSeries.query.filter_by(series_name=_series).first()
             new_series_to_update.series_count = count
             db.session.commit()
+        # a = GameSeries.query.all()
+        # for _series in a:
+        #     sum = 0
+        #     b = Game.query.filter_by(series=_series.series_name)
+        #     if b.count()>0:
+        #         for game in b:
+        #             sum = sum + game.game_review
         a = GameSeries.query.all()
         for _series in a:
             sum = 0
             b = Game.query.filter_by(series=_series.series_name)
-            if b.count()>0:
-                for game in b:
-                    sum = sum + game.game_review
+            print(_series.first_release)
+            firstr = int(_series.first_release or 0)
+            lastr = int(_series.latest_release or 0)
+            for game in b:
+                sum = sum + game.game_review
+                
+                if game.release_dateuk > lastr:
+                    _series.latest_release = game.release_dateuk
+                    game.release_dateuk = firstr
+
+                if game.release_dateuk < firstr or firstr == 0:
+                    _series.first_release = game.release_dateuk
+                    game.release_dateuk = firstr
                 if b.count()!=0 and sum !=0:
                     _series.series_review = sum / (b.count())
+                elif b.count()==0:
+                    _series.series_review = 0.0
+                    _series.latest_release = 0
+                    _series.first_release = 0
         db.session.commit()
         return redirect(url_for("readgame"))
     else:
@@ -176,13 +214,14 @@ def updategame(id):
         form.series.data = game_to_update.series
         form.developer.data = game_to_update.developer
         form.review.data = game_to_update.game_review
+        form.releasedate.data = game_to_update.release_dateuk
     return render_template('updategame.html', form=form, message=error, game=game_to_update)
 
 @app.route("/readgame", methods=["GET", "POST"])
 def readgame():
     form = GameForm()
     all_games_sorted = Game.query.order_by(Game.series).order_by(Game.name).all() 
-    print(app.config['SQLALCHEMY_DATABASE_URI'])
+
     return render_template("readgame.html", form=form, all_games = all_games_sorted )
 
 @app.route('/addseries', methods = ["GET", "POST"])
@@ -195,12 +234,6 @@ def addseries():
         b = []
         for series in a:
             b.append(series.series_name)
-        # return b
-        # if len(series_name) == 0:
-        #     error = "Please enter the series name"
-        # else:
-        print(b)
-        print(_series)
         if _series in b:
             error = "That series has already been used"
         else:
