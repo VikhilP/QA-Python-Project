@@ -57,7 +57,7 @@ The functionality of the project entailed me to use CRUD (Create, Read, Update a
 
 As mentioned before, one of the requirements of the project was to create database using MySQL. So before creation, a database structure had to be agreed upon. 
 
-![Initial DB Design](https://imgur.com/8Dr2kie)
+![Initial DB Design](https://imgur.com/8Dr2kie.jpeg)
 
 Initially, 4 tables had been created. Games, GameSeries, Developers and Publishers.
 

@@ -77,8 +77,8 @@ class TestStories(TestBase):
         self.driver.find_element_by_xpath('//*[@id="submit"]').click()
 
         self.assertIn(url_for('readgame'),self.driver.current_url)
-        
-        self.assertEqual("Rocket League", Game.query.filter_by(game_id=3).name)
+        a= Game.query.filter_by(game_id=3).first()
+        self.assertEqual("Rocket League", a.name)
     
     def test_delete_accidental_game(self):
         self.driver.find_element_by_xpath('//*[@id="Nav Bar"]/a[2]').click()
@@ -102,7 +102,7 @@ class TestStories(TestBase):
         self.driver.find_element_by_xpath('//*[@id="submit"]').click()
 
         self.assertIn(url_for('readgame'),self.driver.current_url)
-        a = Game.query.filter_by(name="Yakuza 0")
+        a = Game.query.filter_by(name="Yakuza 0").first()
         print(a.game_review)
         self.assertEqual(10, a.game_review)
     
