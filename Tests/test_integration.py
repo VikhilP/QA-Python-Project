@@ -73,7 +73,7 @@ class TestStories(TestBase):
         self.driver.find_element_by_xpath('//*[@id="developer"]').send_keys("Psionix")
         #review
         self.driver.find_element_by_xpath('//*[@id="review"]').send_keys("8")
-        
+
         self.driver.find_element_by_xpath('//*[@id="releasedate"]').send_keys("2015")
         #Submit
         self.driver.find_element_by_xpath('//*[@id="submit"]').click()
@@ -84,19 +84,19 @@ class TestStories(TestBase):
     
     def test_delete_accidental_game(self):
         self.driver.find_element_by_xpath('//*[@id="Nav Bar"]/a[2]').click()
-        self.driver.find_element_by_xpath('/html/body/div[2]/table/tbody/tr[3]/th[7]/form/input[2]').click()
+        self.driver.find_element_by_xpath('/html/body/div[2]/table/tbody/tr[3]/td[8]/form/input[2]').click()
         a = Game.query.all()
         self.assertEqual(1, len(a))
 
     def test_read_my_games(self):
         self.driver.find_element_by_xpath('//*[@id="Nav Bar"]/a[2]').click()
-        text = self.driver.find_element_by_xpath('/html/body/div[2]/table/tbody/tr[2]/th[2]').text
+        text = self.driver.find_element_by_xpath('/html/body/div[2]/table/tbody/tr[2]/td[2]').text
         self.assertIn(url_for('readgame'),self.driver.current_url)
         self.assertIn("Yakuza 0", text)
 
     def test_update_review(self):
         self.driver.find_element_by_xpath('//*[@id="Nav Bar"]/a[2]').click()
-        self.driver.find_element_by_xpath('/html/body/div[2]/table/tbody/tr[2]/th[6]/form/input').click()
+        self.driver.find_element_by_xpath('/html/body/div[2]/table/tbody/tr[2]/td[7]/form/input').click()
 
         self.assertIn(url_for('updategame', id=1), self.driver.current_url)
         self.driver.find_element_by_xpath('//*[@id="review"]').clear()
