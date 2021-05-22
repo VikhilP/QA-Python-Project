@@ -1,6 +1,6 @@
 # Brief
 
-I have been tasked with creating a CRUD application that is able to take a database instance and run a relationship between 2 tables using MySQL. 
+I have been tasked with creating a CRUD application that is able to take a database instance and run a relationship between at least 2 tables using MySQL. 
 
 To do this i used a variety of tools:
 - Python
@@ -12,12 +12,14 @@ To do this i used a variety of tools:
 - Gunicorn
 - Flask/ Flask WTForms
 - Git/ Github (for version control)
+- Jinja2
+- Selenium
 
 ## Idea
 
-The idea behind the project was to create a CRUD applicaiton but in a way that would be fun to create and be relatable to me through hobbies and or work. 
+The idea behind the project was to create a CRUD application but in a way that would be fun to create and be relatable to me through hobbies and or work. 
 
-The first idea was to create a DND database in which would store a characters details and and enemys details and allow dice rolls between the 2 to simulate attacks. I rejected this idea due to the complexity of the project being high. This is because i believed that while achiveable in the time frame, the work load of the project would not leave me enough time to finish other projects
+The first idea was to create a DND database in which would store a characters/enemys details and allow dice rolls (using random.randint(1,20)) between the 2 to simulate attacks. I rejected this idea due to the complexity of the project being high. This is because i believed that while achiveable in the time frame, the work load of the project would not leave me enough time to finish other projects
 
 The second idea was to create a Grades Calculator. It was a type of project i had done similiarly at univeristy in Java. All i had to do was convert the project using python. It would have used 3 tables, Modules, Course and University. However, i did not choose this project as i did not want to create the same project twice. Even though i would have been experienced with it, i would not have been as motivated
 
@@ -55,15 +57,17 @@ The functionality of the project entailed me to use CRUD (Create, Read, Update a
 
 As mentioned before, one of the requirements of the project was to create database using MySQL. So before creation, a database structure had to be agreed upon. 
 
+![Initial DB Design](https://imgur.com/a/OpQh4MC)
+
 Initially, 4 tables had been created. Games, GameSeries, Developers and Publishers.
 
 At first, there was an issue with the developers and publishers table. In reality there can be developers at multiple publishers e.g. Obisdian entertainment being freelancers in real life, and publishers having multiple developers under their belt. Then another issue arrises between publishers and game where there would be another many to many relationship. For the sake of complexity, publishers table was the first to go
 
-As the deadline drew nearer, it became less viable to schedule the developers table into production. This was cut to scale down complexity while also entailing the Minimum Viable Product was surpassed. however, an aspect of developers still lives on in the Game table through a column inputted by user entry.
+As the deadline drew nearer, it became less viable to schedule the developers table into production. This was cut to scale down complexity while also entailing the Minimum Viable Product was surpassed. however, an aspect of the "Developers" table still lives on in the Game table through a not null column inputted by user entry.
 
 ### Trello
 
-While in the QA training we have worked with Jira and the SCRUM devops style, the simplicity of trello and its less annoying UI drew me towards it. Kanban board still allowed me to create a to do board which would have been used in Jira. I chose Trello because i did not see the Jira board being used to its fullest with a small, few day sprint.
+While in the QA training we have worked with Jira and the SCRUM devops style, the simplicity of trello and its less annoying UI drew me towards it. Kanban board still allowed me to create a to do board which would have been used in Jira also. I chose Trello because i did not see the Jira board being used to its fullest with a small, few day sprint.
 
 The Trello board has been seperated into sections:
 - User Stories (The basis to my integration testing)
