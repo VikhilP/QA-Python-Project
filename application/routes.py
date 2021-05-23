@@ -149,7 +149,8 @@ def updategame(id):
     form.series.choices=gameseries_array
     seriesupdate = game_to_update.series
 
-    if form.validate_on_submit():
+    # if form.validate_on_submit():
+    if request.method=="POST":
         _name = form.name.data
         _series = form.series.data
         _developer = form.developer.data
