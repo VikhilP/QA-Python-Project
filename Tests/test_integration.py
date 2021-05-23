@@ -81,6 +81,28 @@ class TestStories(TestBase):
         self.assertIn(url_for('readgame'),self.driver.current_url)
         a= Game.query.filter_by(game_id=3).first()
         self.assertEqual("Rocket League", a.name)
+
+    def test_add_new_game_with_series(self):
+        self.driver.find_element_by_xpath('/html/body/div[1]/a[3]').click()
+        self.assertIn(url_for('addgame'),self.driver.current_url)
+
+        #Game Name
+        self.driver.find_element_by_xpath('//*[@id="name"]').send_keys("Yakuza 5")
+        #Developer
+        self.driver.find_element_by_xpath('//*[@id="developer"]').send_keys("RGG")
+        #review
+        self.driver.find_element_by_xpath('//*[@id="review"]').send_keys("8")
+
+        self.driver.find_element_by_xpath('//*[@id="series"]').click()
+        self.driver.find_element_by_xpath('//*[@id="series"]/option[2]').click()
+
+        self.driver.find_element_by_xpath('//*[@id="releasedate"]').send_keys("2012")
+        #Submit
+        self.driver.find_element_by_xpath('//*[@id="submit"]').click()
+
+        self.assertIn(url_for('readgame'),self.driver.current_url)
+        a= Game.query.filter_by(game_id=3).first()
+        self.assertEqual("Yakuza 5", a.name)
     
     def test_delete_accidental_game(self):
         self.driver.find_element_by_xpath('//*[@id="Nav Bar"]/a[2]').click()
