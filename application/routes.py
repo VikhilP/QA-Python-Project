@@ -39,18 +39,18 @@ def deleteGame():
             sum = 0
             b = Game.query.filter_by(series=_series.series_name)
             print(_series.first_release)
-            firstr = 0
-            lastr = 0
+            firstr = int(_series.first_release or 0)
+            lastr = int(_series.latest_release or 0)
             for game in b:
                 sum = sum + game.game_review
-
+                
                 if game.release_dateuk > lastr:
                     _series.latest_release = game.release_dateuk
-                    lastr = game.release_dateuk
-                    
+                    game.release_dateuk = firstr
+
                 if game.release_dateuk < firstr or firstr == 0:
                     _series.first_release = game.release_dateuk
-                    firstr = game.release_dateuk
+                    game.release_dateuk = firstr
                 if b.count()!=0 and sum !=0:
                     _series.series_review = sum / (b.count())
                 elif b.count()==0:
@@ -75,11 +75,19 @@ def addgame():
     form.series.choices=gameseries_array
 
     if form.validate_on_submit():
+
         _name = form.name.data
         _series = form.series.data
         _developer = form.developer.data
         _review = form.review.data
         _release = form.releasedate.data
+
+        # if len(_release) < 4 or len(_release) > 4:
+        #     error = "Must be in YYYY format"
+
+        # elif _review >10 or _review <0:
+        #     error = "Review must be between 0 and 10"
+        # elif len(_release)==4:
 
         new_game = Game(name = _name, series = _series, developer = _developer, game_review = _review, release_dateuk = _release)
         db.session.add(new_game)
@@ -98,7 +106,7 @@ def addgame():
             for game in b:
                 sum = sum + game.game_review
                 
-                if game.release_dateuk > lastr:
+                if game.release_dateuk > lastr or lastr ==0:
                     _series.latest_release = game.release_dateuk
                     lastr = game.release_dateuk
                     
@@ -106,6 +114,7 @@ def addgame():
                     _series.first_release = game.release_dateuk
                     firstr = game.release_dateuk
                     
+            
             if b.count()!=0 and sum !=0:
                 _series.series_review = sum / (b.count())
                 
@@ -203,18 +212,18 @@ def updategame(id):
             sum = 0
             b = Game.query.filter_by(series=_series.series_name)
             print(_series.first_release)
-            firstr = 0
-            lastr = 0
+            firstr = int(_series.first_release or 0)
+            lastr = int(_series.latest_release or 0)
             for game in b:
                 sum = sum + game.game_review
                 
                 if game.release_dateuk > lastr:
                     _series.latest_release = game.release_dateuk
-                    lastr = game.release_dateuk
-                    
+                    game.release_dateuk = firstr
+
                 if game.release_dateuk < firstr or firstr == 0:
                     _series.first_release = game.release_dateuk
-                    firstr = game.release_dateuk
+                    game.release_dateuk = firstr
                 if b.count()!=0 and sum !=0:
                     _series.series_review = sum / (b.count())
                 elif b.count()==0:
