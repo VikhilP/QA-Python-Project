@@ -132,7 +132,7 @@ Once tests are complete, Gunicorn will be used as the deployment server. This is
 
 ![Imgur](https://i.imgur.com/qmLycub.png)
 
-This is the risk assessment for the project, i have linked to it also. I have also used a matrix for this part of the assessment
+This is the risk assessment for the project, i have linked to it also. I have also used a matrix for this part of the assessment. Response(end) denotes me going back to at the end of the project to see if i mitigated the risks
 
 [Full link provided here](https://drive.google.com/file/d/1th_WwNNUO6eMiYGhmJPV46RvA0d1osBq/view?usp=sharing)
 
