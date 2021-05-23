@@ -39,8 +39,8 @@ class GameForm(FlaskForm):
     name = StringField('Game Name', validators=[DataRequired()])
     series = SelectField('Pick Series (if applicable)', choices = [("n/a","n/a"),])
     developer = StringField("Developer", validators=[DataRequired()]) #can turn into a select field just like game series
-    releasedate = StringField("UK Release Year")#, validators=[DataRequired(), Length(min= 4, max= 4, message="Release date must be in YYYY format")])
-    review = IntegerField("Rating")#, [NumberRange(min=0 ,max=10, message="Rating must be between 0 and 10")])
+    releasedate = StringField("UK Release Year", validators=[DataRequired(), Length(min= 4, max= 4, message="Release date must be in YYYY format")])
+    review = IntegerField("Rating", [NumberRange(min=0 ,max=10, message="Rating must be between 0 and 10")])
     submit = SubmitField("Add Game")
 
 

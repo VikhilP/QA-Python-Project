@@ -190,6 +190,14 @@ class TestAdd(TestBase):
         )
         f = len(Game.query.all())
         self.assertEqual(1, f)
+        
+        self.client.post(
+            url_for("deleteGame"),
+            data = dict(game_id=2),
+            follow_redirects = True
+        )
+        a = GameSeries.query.filter_by(series_name = "Yakuza").first()
+        self.assertEqual(a.first_release, 0)
     
     def test_delete_series(self):
         self.client.post(

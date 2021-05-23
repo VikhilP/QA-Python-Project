@@ -52,12 +52,12 @@ def deleteGame():
                 _series.first_release = game.release_dateuk
                 firstr = game.release_dateuk
 
-            if b.count()!=0 and sum !=0:
-                _series.series_review = sum / (b.count())
-            elif b.count()==0:
-                _series.series_review = 0.0
-                _series.latest_release = 0
-                _series.first_release = 0
+        if b.count()!=0 and sum !=0:
+            _series.series_review = sum / (b.count())
+        elif b.count()==0:
+            _series.series_review = 0.0
+            _series.latest_release = 0
+            _series.first_release = 0
 
         db.session.commit()
     return redirect(url_for("readgame"))
@@ -114,11 +114,10 @@ def addgame():
                     _series.first_release = game.release_dateuk
                     firstr = game.release_dateuk
                     
-            
             if b.count()!=0 and sum !=0:
                 _series.series_review = sum / (b.count())
                 
-            elif b.count()==0:
+            else:
                 _series.series_review = 0.0
                 _series.latest_release = 0
                 _series.first_release = 0
@@ -225,12 +224,12 @@ def updategame(id):
                     _series.first_release = game.release_dateuk
                     firstr = game.release_dateuk 
 
-                if b.count()!=0 and sum !=0:
-                    _series.series_review = sum / (b.count())
-                elif b.count()==0:
-                    _series.series_review = 0.0
-                    _series.latest_release = 0
-                    _series.first_release = 0
+            if b.count()!=0 and sum !=0:
+                _series.series_review = sum / (b.count())
+            elif b.count()==0:
+                _series.series_review = 0.0
+                _series.latest_release = 0
+                _series.first_release = 0
         db.session.commit()
         return redirect(url_for("readgame"))
     else:
