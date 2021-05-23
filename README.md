@@ -128,6 +128,18 @@ Ideally once builds are finished i would create a seperate VM instance for produ
 
 Once tests are complete, Gunicorn will be used as the deployment server. This is a WSGI, it turns my development server/code which was accessed via "app.py" to be created deployed to a production server. This means multiple users can now use the system online and not stressout the development server.
 
+running gunicorn deployment server from scratch
+~~~
+git clone "remote repo"
+pip3 install virtualenv
+virtualenv venv
+source venv/bin/activate
+pip3 install -r requirements.txt
+pip3 install gunicorn
+python3 -m gunicorn --bind 0.0.0.0:5000 --workers 4 application:app
+~~~
+In the case for this app, 2 environment variables also need to be created, 1 for the database uri, another for the Secret Key
+
 ## Risk Assessment
 
 ![Imgur](https://i.imgur.com/qmLycub.png)
