@@ -47,9 +47,9 @@ class TestBase(TestCase):
         a = GameSeries.query.filter_by(series_name="Yakuza").first()
 
         samplegame1 = Game(name="Yakuza 0", series=a.series_name, 
-            developer="RGG", game_review=10)
+            developer="RGG", game_review=10, release_dateuk = 2015)
         samplegame2 = Game(name="Yakuza Kiwami", series=a.series_name, 
-            developer="RGG", game_review=9)
+            developer="RGG", game_review=9, release_dateuk = 2016)
         db.session.add(samplegame1)
         db.session.add(samplegame2)
         db.session.commit()
@@ -120,31 +120,38 @@ class TestAdd(TestBase):
             data = dict(series_name = ""),
             follow_redirects = True
         )
-        self.assertIn(b"Please enter the series name", response.data)
+        a = GameSeries.query.all()
+        self.assertEqual(len(a), 2)
     
-    def test_add_game(self):
+    def test_addgame_with_series(self):
         response = self.client.post(
             url_for('addgame'),
-            data = dict(name = "Yakuza 5", series = "Yakuza", developer="RGG", review=8 ),
+            data = dict(name = "Yakuza 5", series = "Yakuza", developer="RGG", review=8, releasedate = 2012),
             follow_redirects = True
+            
         )
+
         self.assertIn(b"Yakuza 5", response.data)
+  
+    
     
     def test_add_game_fail(self):
         response = self.client.post(
             url_for('addgame'),
-            data = dict(series = "Yakuza", developer="RGG", review=8 ),
+            data = dict(series = "Yakuza", developer="RGG", review=8 , releasedate = 2015 ),
             follow_redirects = True
         )
-        self.assertIn(b"Please fill the required fields", response.data)
+        a = Game.query.all()
+
+        self.assertEqual(len(a), 2)
     
     def test_update_game(self):
         response = self.client.post(
             url_for('updategame', id=1),
-            data = dict(name = "Yakuza 5", series = "Yakuza", developer="RGG", review=8 ),
+            data = dict(name = "Yakuza 5", series = "Yakuza", developer="RGG", review=8 ,releasedate = 2015 ),
             follow_redirects = True
         )
-        self.assertIn("Yakuza 5", Game.query.get(1).name)
+        self.assertEqual("Yakuza 5", Game.query.get(1).name)
 
     def test_update_series(self):
         response = self.client.post(
@@ -170,7 +177,7 @@ class TestAdd(TestBase):
     def test_update_review(self):
         self.client.post(
             url_for('updategame', id=1),
-            data = dict(name = "Yakuza 0", series = "Yakuza", developer = "RGG", review=9),
+            data = dict(name = "Yakuza 0", series = "Yakuza", developer = "RGG", review=9, releasedate = 2015),
             follow_redirects = True
         )
         self.assertEqual(9.0,GameSeries.query.get(2).series_review)
@@ -183,6 +190,14 @@ class TestAdd(TestBase):
         )
         f = len(Game.query.all())
         self.assertEqual(1, f)
+        
+        self.client.post(
+            url_for("deleteGame"),
+            data = dict(game_id=2),
+            follow_redirects = True
+        )
+        a = GameSeries.query.filter_by(series_name = "Yakuza").first()
+        self.assertEqual(a.first_release, 0)
     
     def test_delete_series(self):
         self.client.post(

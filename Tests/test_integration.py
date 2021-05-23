@@ -48,9 +48,9 @@ class TestBase(LiveServerTestCase):
         a = GameSeries.query.filter_by(series_name="Yakuza").first()
 
         samplegame1 = Game(name="Yakuza 0", series=a.series_name, 
-            developer="RGG", game_review=10)
+            developer="RGG", game_review=10, release_dateuk = 2015)
         samplegame2 = Game(name="Yakuza Kiwami", series=a.series_name, 
-            developer="RGG", game_review=9)
+            developer="RGG", game_review=9, release_dateuk = 2016)
         db.session.add(samplegame1)
         db.session.add(samplegame2)
         db.session.commit()
@@ -73,30 +73,59 @@ class TestStories(TestBase):
         self.driver.find_element_by_xpath('//*[@id="developer"]').send_keys("Psionix")
         #review
         self.driver.find_element_by_xpath('//*[@id="review"]').send_keys("8")
+
+        self.driver.find_element_by_xpath('//*[@id="releasedate"]').send_keys("2015")
         #Submit
         self.driver.find_element_by_xpath('//*[@id="submit"]').click()
 
         self.assertIn(url_for('readgame'),self.driver.current_url)
         a= Game.query.filter_by(game_id=3).first()
         self.assertEqual("Rocket League", a.name)
+
+    def test_add_new_game_with_series(self):
+        self.driver.find_element_by_xpath('/html/body/div[1]/a[3]').click()
+        self.assertIn(url_for('addgame'),self.driver.current_url)
+
+        #Game Name
+        self.driver.find_element_by_xpath('//*[@id="name"]').send_keys("Yakuza 5")
+        #Developer
+        self.driver.find_element_by_xpath('//*[@id="developer"]').send_keys("RGG")
+        #review
+        self.driver.find_element_by_xpath('//*[@id="review"]').send_keys("8")
+
+        self.driver.find_element_by_xpath('//*[@id="series"]').click()
+        self.driver.find_element_by_xpath('//*[@id="series"]/option[2]').click()
+
+        self.driver.find_element_by_xpath('//*[@id="releasedate"]').send_keys("2012")
+        #Submit
+        self.driver.find_element_by_xpath('//*[@id="submit"]').click()
+
+        self.assertIn(url_for('readgame'),self.driver.current_url)
+        a= Game.query.filter_by(game_id=3).first()
+
+        self.assertEqual("Yakuza 5", a.name)
+        
+        b = GameSeries.query.filter_by(id=2).first()
+        self.assertEqual(b.first_release, 2012)
     
     def test_delete_accidental_game(self):
         self.driver.find_element_by_xpath('//*[@id="Nav Bar"]/a[2]').click()
-        self.driver.find_element_by_xpath('/html/body/div[2]/table/tbody/tr[3]/th[7]/form/input[2]').click()
+        self.driver.find_element_by_xpath('/html/body/div[2]/table/tbody/tr[3]/td[8]/form/input[2]').click()
         a = Game.query.all()
         self.assertEqual(1, len(a))
 
     def test_read_my_games(self):
         self.driver.find_element_by_xpath('//*[@id="Nav Bar"]/a[2]').click()
-        text = self.driver.find_element_by_xpath('/html/body/div[2]/table/tbody/tr[2]/th[2]').text
+        text = self.driver.find_element_by_xpath('/html/body/div[2]/table/tbody/tr[2]/td[2]').text
         self.assertIn(url_for('readgame'),self.driver.current_url)
         self.assertIn("Yakuza 0", text)
 
     def test_update_review(self):
         self.driver.find_element_by_xpath('//*[@id="Nav Bar"]/a[2]').click()
-        self.driver.find_element_by_xpath('/html/body/div[2]/table/tbody/tr[2]/th[6]/form/input').click()
+        self.driver.find_element_by_xpath('/html/body/div[2]/table/tbody/tr[2]/td[7]/form/input').click()
 
         self.assertIn(url_for('updategame', id=1), self.driver.current_url)
+        
         self.driver.find_element_by_xpath('//*[@id="review"]').clear()
         self.driver.find_element_by_xpath('//*[@id="review"]').send_keys(10)
         self.driver.find_element_by_xpath('//*[@id="submit"]').click()
