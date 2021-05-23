@@ -179,9 +179,11 @@ python3.6 -m pytest --cov=application --cov-report=term-missing
 7) Open up the work space and retrieve the html file named "index", this will provide the coverage report of the build test
 
 ![Imgur](https://i.imgur.com/PodFWN6.png)
+
 Proof of passed tests
 
 ![Imgur](https://i.imgur.com/DEC2h3Z.png)
+
 HTML coverage report
 
 ## Reasons for the tests
@@ -214,15 +216,19 @@ What was not tested:
 The front end is seperated into 4 seperate pages
 
 ![imgur](https://i.imgur.com/JbeX9gO.png)
+
 Games Series list contains all the series stored in the database. 
 
 ![Imgur](https://i.imgur.com/mcwzi9q.png)
+
 Games list which stores all the games in the database
 
 ![Imgur](https://i.imgur.com/DG3OSeN.png)
+
 Add series, you may notice that this only takes one arguement, the program makes sure that the data inputted is unique. it is up to the user to pair the game with that series at creation of a game or update of one. This dynamically changes the attributes of Series review, series count, first release and latest release
 
 ![Imgur](https://i.imgur.com/K4IPxCp.png)
+
 lastly, the add new games page. here the user will input a name, developer, select a series from a selectfield (by default, the first series is "n/a", an entry to the database that the user will not see on the game series list). The user is prompted, when failed to input the release year in YYYY format and use numbers between 0 and 10 for the review.
 
 The screen to update the game is very similar to the add game screen but will instead have the data of the game already inputted
