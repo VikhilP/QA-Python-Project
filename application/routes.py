@@ -89,11 +89,11 @@ def addgame():
                     
                     if game.release_dateuk > lastr:
                         _series.latest_release = game.release_dateuk
-                        game.release_dateuk = firstr
-
+                        lastr = game.release_dateuk
+                        
                     if game.release_dateuk < firstr or firstr == 0:
                         _series.first_release = game.release_dateuk
-                        game.release_dateuk = firstr
+                        firstr = game.release_dateuk
                 
                 if b.count()!=0 and sum !=0:
                     _series.series_review = sum / (b.count())
@@ -119,16 +119,16 @@ def updateseries(id):
         _name = form.series_name.data
 
         old_name = series_to_update.series_name
-        if len(_name) == 0:
-            error = "Please fill the required fields"
-        else:
-            series_to_update.series_name = _name
-            db.session.commit()
-            all_games_filter = Game.query.filter_by(series=old_name).all()
-            for game in all_games_filter:
-                game.series = _name
-            db.session.commit()
-            return redirect(url_for("index"))
+        # if len(_name) == 0:
+        #     error = "Please fill the required fields"
+        # else:
+        series_to_update.series_name = _name
+        db.session.commit()
+        all_games_filter = Game.query.filter_by(series=old_name).all()
+        for game in all_games_filter:
+            game.series = _name
+        db.session.commit()
+        return redirect(url_for("index"))
     else:
         form.series_name.data = series_to_update.series_name
     return render_template('updateseries.html', form=form, message=error, series=series_to_update)

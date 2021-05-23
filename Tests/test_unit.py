@@ -126,10 +126,15 @@ class TestAdd(TestBase):
     def test_add_game(self):
         response = self.client.post(
             url_for('addgame'),
-            data = dict(name = "Yakuza 5", series = "Yakuza", developer="RGG", review=8, release = 2015 ),
+            data = dict(name = "Yakuza 5", series = "Yakuza", developer="RGG", review="8", release = "2012"),
             follow_redirects = True
         )
+        # print(len(Game.query.all()) ,"Test result")
+
         self.assertIn(b"Yakuza 5", response.data)
+        # a = GameSeries.query.get(2)
+        # self.assertEqual(a.first_release, 2012)
+    
     
     def test_add_game_fail(self):
         response = self.client.post(
