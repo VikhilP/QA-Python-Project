@@ -130,10 +130,13 @@ class TestAdd(TestBase):
             follow_redirects = True
         )
         # print(len(Game.query.all()) ,"Test result")
-
+        b = len(GameSeries.query.all())
+        c = GameSeries.query.filter_by(series_name = "Yakuza").first()
+        print(c.series_count)
+        print (b , "Test")
         self.assertIn(b"Yakuza 5", response.data)
-        # a = GameSeries.query.get(2)
-        # self.assertEqual(a.first_release, 2012)
+        
+        # self.assertEqual(b.first_release, 2012)
     
     
     def test_add_game_fail(self):

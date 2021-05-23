@@ -102,7 +102,9 @@ class TestStories(TestBase):
 
         self.assertIn(url_for('readgame'),self.driver.current_url)
         a= Game.query.filter_by(game_id=3).first()
+
         self.assertEqual("Yakuza 5", a.name)
+        
         b = GameSeries.query.filter_by(id=2).first()
         self.assertEqual(b.first_release, 2012)
     
