@@ -229,3 +229,12 @@ The screen to update the game is very similar to the add game screen but will in
 - Implement better UI through CSS. I have some experience with CSS, but i have no idea how to implement it onto flask/python. spending a day or two to learn and freshen up on the topic could allow the project to grow alot more!
 - Add in the developers and publishers table
 
+## Authors
+
+Vikhil Parshotam
+
+### Acknoledgements
+
+- Ben Hesketh - For helping with debugging and teaching of cloud technologies
+- Raji - For helping learn python
+- The QA DEVOPS Team - Helped me with debugging throughout the week on the project and pointing me to the right resources
