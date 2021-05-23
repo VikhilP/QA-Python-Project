@@ -188,6 +188,32 @@ What was not tested:
 
 ## Front End
 
+The front end is seperated into 4 seperate pages
+
+![imgur](https://i.imgur.com/JbeX9gO.png)
+Games Series list contains all the series stored in the database. 
+
+![Imgur](https://i.imgur.com/mcwzi9q.png)
+Games list which stores all the games in the database
+
+![Imgur](https://i.imgur.com/DG3OSeN.png)
+Add series, you may notice that this only takes one arguement, the program makes sure that the data inputted is unique. it is up to the user to pair the game with that series at creation of a game or update of one. This dynamically changes the attributes of Series review, series count, first release and latest release
+
+![Imgur](https://i.imgur.com/K4IPxCp.png)
+lastly, the add new games page. here the user will input a name, developer, select a series from a selectfield (by default, the first series is "n/a", an entry to the database that the user will not see on the game series list). The user is prompted, when failed to input the release year in YYYY format and use numbers between 0 and 10 for the review.
+
+The screen to update the game is very similar to the add game screen
 
 
+## Known Issues
+
+- As mentioned before, the update series is not working as intended and produces an SQL integrity error due to trying to change the foriegn key. I had this working on a previous build but since adding a few more elements to the models i have been unable to rectify the issue. This was an issue with my planning as i added more on top of my already completed work which only complicated the issue
+- Sometimes, when adding or updating a game, the series "n/a" may appear twice. so far this has no affect on the user as both behave the same (Wont be shown in the series list section)
+
+## Potential Improvements
+
+- If i had more time, i would definitly implement a sort system onto the program. after a few insertions, the program becomes hard to read
+- a way of mass adding games to series, so far a user will have to do each one individually
+- Iron out the update series bug, this one pained me as it was a mistake on my part, if i gave myself more time i would have been able to fix this issue by asking trainers for help, instead i left it till the weekednd and paid the price
+- Implement better UI through CSS. I have some experience with CSS, but i have no idea how to implement it onto flask/python. spending a day or two to learn and freshen up on the topic could allow the project to grow alot more!
 
