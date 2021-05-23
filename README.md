@@ -42,7 +42,7 @@ The functionality of the project entailed me to use CRUD (Create, Read, Update a
 ### Update
 
 - The user could change the name of an existing series
-- Changing series name would update all the games with that series in it (This was not implemented fully, explained later)
+- Changing series name would update all the games with that series in it (This was not implemented 100% online, explained later)
 - Changing review score of a game would produce a different average review score for the series
 - Adding a game to the series would affect the total game count of the series
 
@@ -208,7 +208,7 @@ What was tested:
 What was not tested:
 
 - 1 user story, this is due to not being able to create that feature yet. this would be the adding a favourite game feature.
-- Update series, i had encounterd a bug late in development. this rendered me unable to fix during this sprint and had to be left incomplete. since i was able to still have an update game feature, i was sure i could still hit the MVP and move on to more important tests. This is the one test i regret could not be inside the scope of the project
+- Update series, i had encounterd a bug late in development. this rendered me unable to fix during this sprint and had to be left incomplete. since i was able to still have an update game feature, i was sure i could still hit the MVP and move on to more important tests. This is the one test i regret could not be inside the scope of the project. However, upon using a Local server, the had fixed itself. This means that an issue lies somewhere in the mysql server constraint rules being different to the local SQLite rules. This means in testing environments, the program works, but oneline cloud servers cause an issue.
 
 
 # Front End
@@ -243,7 +243,7 @@ The screen to update the game is very similar to the add game screen but will in
 
 - If i had more time, i would definitly implement a sort system onto the program. after a few insertions, the program becomes hard to read
 - a way of mass adding games to series, so far a user will have to do each one individually
-- Iron out the update series bug, this one pained me as it was a mistake on my part, if i gave myself more time i would have been able to fix this issue by asking trainers for help, instead i left it till the weekend and paid the price
+- Iron out the update series bug, this one pained me as it was a mistake on my part, if i gave myself more time i would have been able to fix this issue by asking trainers for help, instead i left it till the weekend and paid the price. This happened because of a late change to using an online sql database, if i had made the change from local to online sooner, i would have spotted the error quicker and been able to have more time to fix the issue
 - Implement better UI through CSS. I have some experience with CSS, but i have no idea how to implement it onto flask/python. spending a day or two to learn and freshen up on the topic could allow the project to grow alot more!
 - Add in the developers and publishers table
 
