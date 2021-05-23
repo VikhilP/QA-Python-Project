@@ -123,18 +123,18 @@ class TestAdd(TestBase):
         a = GameSeries.query.all()
         self.assertEqual(len(a), 2)
     
-    # def test_add_game(self):
-    #     response = self.client.post(
-    #         url_for('addgame'),
-    #         data = dict(name = "Yakuza 5", series = "Yakuza", developer="RGG", review=8, release = 2012),
-    #         follow_redirects = True
-    #     )
+    def test_add_game(self):
+        response = self.client.post(
+            url_for('addgame'),
+            data = dict(name = "Yakuza 5", series = "Yakuza", developer="RGG", review=8, release = 2012),
+            follow_redirects = True
+        )
     #     # print(len(Game.query.all()) ,"Test result")
     #     # b = len(GameSeries.query.all())
     #     # c = GameSeries.query.filter_by(series_name = "Yakuza").first()
     #     # print(c.series_count)
     #     # print (b , "Test")
-    #     self.assertIn(b"Yakuza 5", response.data)
+        self.assertIn(b"Yakuza 5", response.data)
         
     #     # self.assertEqual(b.first_release, 2012)
     
