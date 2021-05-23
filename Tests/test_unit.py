@@ -123,11 +123,12 @@ class TestAdd(TestBase):
         a = GameSeries.query.all()
         self.assertEqual(len(a), 2)
     
-    def test_broken_to_prove_point(self):
+    def test_addgame_with_series(self):
         response = self.client.post(
             url_for('addgame'),
-            data = dict(name = "Yakuza 5", series = "Yakuza", developer="RGG", review=8, release = 2012),
+            data = dict(name = "Yakuza 5", series = "Yakuza", developer="RGG", review=8, releasedate = 2012),
             follow_redirects = True
+            
         )
 
         self.assertIn(b"Yakuza 5", response.data)
@@ -137,7 +138,7 @@ class TestAdd(TestBase):
     def test_add_game_fail(self):
         response = self.client.post(
             url_for('addgame'),
-            data = dict(series = "Yakuza", developer="RGG", review=8 , release_dateuk = 2015 ),
+            data = dict(series = "Yakuza", developer="RGG", review=8 , releasedate = 2015 ),
             follow_redirects = True
         )
         a = Game.query.all()

@@ -101,12 +101,11 @@ def addgame():
         for _series in a:
             sum = 0
             b = Game.query.filter_by(series=_series.series_name)
-            print(_series.first_release)
             firstr =  0
             lastr = 0
             for game in b:
                 sum = sum + game.game_review
-                
+                print(game.release_dateuk)
                 if game.release_dateuk > lastr:
                     _series.latest_release = game.release_dateuk
                     lastr = game.release_dateuk
