@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h2>Add a New Series</h2>
+    <div class='form'>
+        <form method='POST' action=''>
+            {{ form.hidden_tag() }}
+            items denoted by '*' are required 
+            <br>
+            {{ form.series_name.label }} * {{ form.series_name}} 
+            <br>
+            {% if form.series_name.errors %}
+                <div class='error'>
+                    {% for error in form.series_name.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {{ form.submit }}
+        {{ message }}
+        </form>
+    </div>
+{% endblock body %}

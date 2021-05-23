@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h2>Update Series</h2>
+    <div class='form'>
+        <form method='POST' action=''>
+            <input type="hidden" value="{{series.id}}" name="id">
+            {{ form.hidden_tag() }}
+            items denoted by '*' are required 
+            <br>
+            {{ form.series_name.label }} * {{ form.series_name}} 
+            <br>
+            {{ form.submit }}
+        {{ message }}
+        </form>
+    </div>
+{% endblock body %}

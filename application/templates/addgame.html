@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h2>Add a New Game</h2>
+    <div class='form'>
+        <form method='POST' action=''>
+            {{ form.hidden_tag() }}
+            items denoted by '*' are required 
+            <br>
+            {{ form.name.label }}* {{ form.name}} 
+            <br>
+            {{ form.series.label }} {{ form.series}} 
+            <br>
+            {{ form.developer.label }}* {{ form.developer}} 
+            <br>
+            {{ form.releasedate.label }}* {{ form.releasedate}} 
+            <br>
+            {{ form.review.label }}* {{ form.review}} 
+            {% if form.releasedate.errors %}
+                <div class='error'>
+                    {% for error in form.releasedate.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if form.review.errors %}
+                <div class='error'>
+                    {% for error in form.review.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {{ form.submit }}
+        {{ message }}
+        </form>
+    </div>
+{% endblock body %}
