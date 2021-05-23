@@ -16,7 +16,6 @@ def deleteSeries():
     all_games = Game.query.filter_by(series=temptask.series_name).all()
     db.session.delete(temptask)
     db.session.commit()
-    print(all_games)
     for game in all_games:
         game.series = "n/a"
     db.session.commit()
@@ -141,16 +140,77 @@ def updateseries(id):
         _name = form.series_name.data
 
         old_name = series_to_update.series_name
+
+        # temp = request.form.get("id")
+        # temptask = GameSeries.query.filter_by(id=temp).first()
+        all_games = Game.query.filter_by(series=old_name).all()
+        # db.session.delete(series_to_update)
+        
+        a = GameSeries.query.all()
+        b = []
+        for series in a:
+            b.append(series.series_name)
+        if _name in b:
+            error = "That series has already been used"
+        else:
+            series_to_update.series_name = _name
+        #     db.session.add(new_series)
+            # db.session.commit()
+        
+
+        for game in all_games:
+            game.series = _name
+            db.session.commit()
+        db.session.commit()
+        return redirect(url_for("index"))
+
+
         # if len(_name) == 0:
         #     error = "Please fill the required fields"
         # else:
-        series_to_update.series_name = _name
-        db.session.commit()
-        all_games_filter = Game.query.filter_by(series=old_name).all()
-        for game in all_games_filter:
-            game.series = _name
-        db.session.commit()
-        return redirect(url_for("index"))
+        #     all_games_filter = Game.query.filter_by(series=old_name).all()
+        #     for game in all_games_filter:
+        #         game.series = _name
+        #     # db.session.commit()
+        #     series_to_update.series_name = _name
+        #     db.session.commit()
+        #     return redirect(url_for("index"))
+        # temp = request.form.get("id")
+        # temptask = GameSeries.query.filter_by(id=temp).first()
+        # all_games = Game.query.filter_by(series=series_to_update.series_name).all()
+        # db.session.delete(temptask)
+        # db.session.commit()
+
+        # a = GameSeries.query.all()
+        # b = []
+        # for series in a:
+        #     b.append(series.series_name)
+        
+        # if form.series_name.data not in b or form.series_name.data == series_to_update.series_name:
+        #     series_to_update.series_name = form.series_name.data
+        #     db.session.commit()
+        
+            # for game in all_games:
+            #     game.series = form.series_name.data
+            # db.session.commit()
+
+
+            # _name = form.series_name.data
+
+            # old_name = series_to_update.series_name
+            # # if len(_name) == 0:
+            # #     error = "Please fill the required fields"
+            # # else:
+            # series_to_update.series_name = _name
+            # db.session.commit()
+            # all_games_filter = Game.query.filter_by(series=old_name).all()
+            # for game in all_games_filter:
+            #     game.series = _name
+            # db.session.commit()
+            # return redirect(url_for("index"))
+        # else:
+        #     error = "This has already been used"
+        
     else:
         form.series_name.data = series_to_update.series_name
     return render_template('updateseries.html', form=form, message=error, series=series_to_update)
