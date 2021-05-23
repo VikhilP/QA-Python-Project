@@ -30,28 +30,8 @@ class Game(db.Model):
 
 class SeriesForm(FlaskForm):
     
-    # def validate_task(self):
-    #     _series = GameSeries.query.all()
-    #     for series in _series:
-    #         if series.series_name == self.data:
-    #             raise ValidationError('This Series already has been added')
-    # def uniquelist():
-    # a = GameSeries.query.all()
-    # b = []
-    # for series in a:
-    #     b.append(series.series_name)
-    #     # return b
-
     series_name = StringField('Series Name', validators=[DataRequired()])
     submit = SubmitField("Add Series")
-    # def validate_unique(form, field):
-    #     if not field.raw_data:
-    #         item = GameSeries.query.filter_by(series_name=form.field.data).first()
-    #         if item:
-    #             raise ValidationError('must be unique')
-    #     raise ValidationError('cannot be blank')
-    
-
 
 
 
