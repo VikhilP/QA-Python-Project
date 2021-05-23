@@ -124,9 +124,6 @@ class TestStories(TestBase):
 
         self.assertIn(url_for('updategame', id=1), self.driver.current_url)
         
-        a= self.driver.find_element_by_xpath('//*[@id="releasedate"]').text
-        self.assertEqual(2015, a)
-
         self.driver.find_element_by_xpath('//*[@id="review"]').clear()
         self.driver.find_element_by_xpath('//*[@id="review"]').send_keys(10)
         self.driver.find_element_by_xpath('//*[@id="submit"]').click()
