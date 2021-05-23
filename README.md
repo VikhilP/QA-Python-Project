@@ -208,7 +208,7 @@ What was tested:
 What was not tested:
 
 - 1 user story, this is due to not being able to create that feature yet. this would be the adding a favourite game feature.
-- Update series, i had encounterd a bug late in development. this rendered me unable to fix during this sprint and had to be left incomplete. since i was able to still have an update game feature, i was sure i could still hit the MVP and move on to more important tests. This is the one test i regret could not be inside the scope of the project. However, upon using a Local server, the had fixed itself. This means that an issue lies somewhere in the mysql server constraint rules being different to the local SQLite rules. This means in testing environments, the program works, but oneline cloud servers cause an issue.
+- Update series, i had encounterd a bug late in development. this rendered me unable to fix during this sprint and had to be left incomplete. since i was able to still have an update game feature, i was sure i could still hit the MVP and move on to more important tests. This is the one test i regret could not be inside the scope of the project. However, upon using a Local server, the had fixed itself. This means that an issue lies somewhere in the mysql server constraint rules being different to the local SQLite rules. This means in testing environments, the program works, but online cloud servers cause an issue. More research needed
 
 
 # Front End
