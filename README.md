@@ -157,6 +157,8 @@ I have run these tests through the Jenkins build server.
 pip3 install virtualenv
 virtualenv venv
 source venv/bin/activate
+export DBConnect="mysql+pymysql://root:password@35.189.124.225:3306/games"
+export SecretK="ThisIsMySecretKey"
 pip3 install -r requirements.txt
 cd Tests
 python3.6 -m pytest --cov=application --cov-report=term-missing
