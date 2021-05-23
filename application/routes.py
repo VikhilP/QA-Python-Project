@@ -1,3 +1,4 @@
+from wtforms.validators import ValidationError
 from application import app, db
 from application.models import Game, GameSeries, SeriesForm, GameForm
 from flask import render_template, request, redirect, url_for #added this as i know i will need it later
@@ -56,52 +57,61 @@ def addgame():
     form = GameForm()
     all_gameseries = GameSeries.query.all()
     gameseries_array = []
-
+    done = 0
     for series in all_gameseries:
         gameseries_array.append(tuple((series.series_name, series.series_name)))
 
     form.series.choices=gameseries_array
 
     if form.validate_on_submit():
+
         _name = form.name.data
         _series = form.series.data
         _developer = form.developer.data
         _review = form.review.data
         _release = form.releasedate.data
 
-        
+        # if len(_release) < 4 or len(_release) > 4:
+        #     error = "Must be in YYYY format"
+
+        # elif _review >10 or _review <0:
+        #     error = "Review must be between 0 and 10"
+        # elif len(_release)==4:
+
         new_game = Game(name = _name, series = _series, developer = _developer, game_review = _review, release_dateuk = _release)
         db.session.add(new_game)
         db.session.commit()
-        if _series!= "n/a":
-            game_series_to_update = GameSeries.query.filter_by(series_name=_series).first()
-            game_series_to_update.series_count += 1
-            db.session.commit()
-            a = GameSeries.query.all()
-            for _series in a:
-                sum = 0
-                b = Game.query.filter_by(series=_series.series_name)
-                print(_series.first_release)
-                firstr = int(_series.first_release or 0)
-                lastr = int(_series.latest_release or 0)
-                for game in b:
-                    sum = sum + game.game_review
-                    
-                    if game.release_dateuk > lastr:
-                        _series.latest_release = game.release_dateuk
-                        lastr = game.release_dateuk
-                        
-                    if game.release_dateuk < firstr or firstr == 0:
-                        _series.first_release = game.release_dateuk
-                        firstr = game.release_dateuk
+        # if form.series.data!= "n/a":
+        game_series_to_update = GameSeries.query.filter_by(series_name=_series).first()
+        game_series_to_update.series_count += 1
+        db.session.commit()
+        a = GameSeries.query.all()
+        for _series in a:
+            sum = 0
+            b = Game.query.filter_by(series=_series.series_name)
+            print(_series.first_release)
+            firstr = int(_series.first_release or 0)
+            lastr = int(_series.latest_release or 0)
+            for game in b:
+                sum = sum + game.game_review
                 
-                if b.count()!=0 and sum !=0:
-                    _series.series_review = sum / (b.count())
-                elif b.count()==0:
-                    _series.series_review = 0.0
-                    _series.latest_release = 0
-                    _series.first_release = 0
-            db.session.commit()
+                if game.release_dateuk > lastr:
+                    _series.latest_release = game.release_dateuk
+                    lastr = game.release_dateuk
+                    
+                if game.release_dateuk < firstr or firstr == 0:
+                    _series.first_release = game.release_dateuk
+                    firstr = game.release_dateuk
+                    
+            
+            if b.count()!=0 and sum !=0:
+                _series.series_review = sum / (b.count())
+            elif b.count()==0:
+                _series.series_review = 0.0
+                _series.latest_release = 0
+                _series.first_release = 0
+                
+        db.session.commit()
 
         return redirect(url_for("readgame"))
     
@@ -149,8 +159,7 @@ def updategame(id):
     form.series.choices=gameseries_array
     seriesupdate = game_to_update.series
 
-    # if form.validate_on_submit():
-    if request.method=="POST":
+    if form.validate_on_submit():
         _name = form.name.data
         _series = form.series.data
         _developer = form.developer.data
